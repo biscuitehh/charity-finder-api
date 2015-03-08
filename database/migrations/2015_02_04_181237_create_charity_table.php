@@ -15,7 +15,7 @@ class CreateCharityTable extends Migration {
 		Schema::create('charity', function(Blueprint $table)
 		{
             // ID
-			$table->increments('id')->nullable();
+			$table->increments('id');
 			$table->unique('id');
 
             // Federal EIN
@@ -34,12 +34,6 @@ class CreateCharityTable extends Migration {
 			$table->string('city')->nullable();
 			$table->string('state')->nullable();
 			$table->string('zip')->nullable();
-
-            // Location
-            $table->decimal('latitude', 10, 8);
-            $table->index('latitude');
-            $table->decimal('longitude', 11, 8);
-            $table->index('longitude');
 
             // Other information
 			$table->string('group')->nullable();
@@ -64,9 +58,16 @@ class CreateCharityTable extends Migration {
 			$table->string('ntee_cd')->nullable();
 			$table->string('sort_name')->nullable();
 
+            // Timestamps
 			$table->timestamps();
 		});
-	}
+
+        // Location
+        DB::statement("ALTER TABLE charity ADD COLUMN location GEOMETRY(POINT, 4326)");
+
+        // Index
+        DB::statement("CREATE INDEX charity_location_index ON charity USING GIST (location)");
+    }
 
 	/**
 	 * Reverse the migrations.

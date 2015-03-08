@@ -7,16 +7,6 @@ use Illuminate\Http\Response;
 class CharityController extends Controller {
 
     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
-
-    /**
      * Show the application welcome screen to the user.
      *
      * @return Response
@@ -69,8 +59,7 @@ class CharityController extends Controller {
                     'city' => $charity->city,
                     'state' => $charity->state,
                     'zip' => $charity->zip,
-                    'latitude' => $charity->latitude,
-                    'longitude' => $charity->longitude
+                    'location' => $charity->location
                 ];
             }
         } catch (Exception $e) {

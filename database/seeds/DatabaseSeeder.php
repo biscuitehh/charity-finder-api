@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder {
 	 */
 	public function run()
 	{
+        DB::table('charity')->truncate();
 		Model::unguard();
 
 		$this->call('CharityTableSeeder');
@@ -66,14 +67,14 @@ class CharityTableSeeder extends Seeder {
                             $date = new DateTime();
                             $csv = array();
                             $csv['ein'] = $raw[0];
-                            $csv['name'] = ucwords(strtolower($raw[1]));
+                            $csv['name'] = $raw[1];
                             $csv['ico'] = $raw[2];
                             $csv['street_address'] = $raw[3];
-                            $csv['city'] = ucwords(strtolower($raw[4]));
+                            $csv['city'] = $raw[4];
                             $csv['state'] = $raw[5];
                             $csv['zip'] = $raw[6];
-                            $csv['latitude'] = $faker->latitude;
-                            $csv['longitude'] = $faker->longitude;
+                            $location = DB::raw("ST_GeomFromText('POINT(".$faker->longitude." ".$faker->latitude.")', 4326)");
+                            $csv['location'] = $location;
                             $csv['group'] = $raw[7];
                             $csv['subsection'] = $raw[8];
                             $csv['affiliation'] = $raw[9];
